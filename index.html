@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Amada </title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50,90 C50,90 10,60 10,35 C10,20 20,10 30,10 C40,10 45,15 50,25 C55,15 60,10 70,10 C80,10 90,20 90,35 C90,60 50,90 50,90 Z' fill='%23764ba2'/></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* ===== TEMA ESCURO ===== */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-mode .card {
+            background: #0f3460;
+            color: #e4e4e4;
+        }
+
+        body.dark-mode .pedido h2,
+        body.dark-mode .cronometro h2,
+        body.dark-mode .filmes h2 {
+            color: #9d84b7;
+        }
+
+        body.dark-mode .pedido p {
+            color: #c4c4c4;
+        }
+
+        body.dark-mode .pergunta {
+            color: #9d84b7;
+        }
+
+        body.dark-mode .mensagem-final {
+            color: #9d84b7;
+        }
+
+        body.dark-mode td {
+            color: #e4e4e4;
+            border-bottom: 1px solid #1a1a2e;
+        }
+
+        body.dark-mode tr:hover {
+            background: #16213e;
+        }
+
+        body.dark-mode .tabela-container {
+            border: 2px solid #9d84b7;
+        }
+
+        body.dark-mode .tabela-container::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode #futuro {
+            background: linear-gradient(135deg, rgba(157, 132, 183, 0.2) 0%, rgba(157, 132, 183, 0.1) 100%);
+            border: 2px dashed #9d84b7;
+        }
+
+        body.dark-mode #futuro h2 {
+            color: #9d84b7;
+        }
+
+        body.dark-mode #futuro p {
+            color: #c4c4c4;
+        }
+
+        /* ===== BOTÃO DE TEMA ===== */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        body.dark-mode .theme-toggle {
+            background: #0f3460;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease;
+            transition: all 0.5s ease;
+        }
+
+        .pedido {
+            text-align: center;
+        }
+
+        .pedido h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 2em;
+            transition: color 0.5s ease;
+        }
+
+        .pedido p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            transition: color 0.5s ease;
+        }
+
+        .pergunta {
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 30px 0 20px 0;
+            transition: color 0.5s ease;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-sim {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-sim:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-nao {
+            background: #ddd;
+            color: #666;
+            position: relative;
+        }
+
+        .cronometro {
+            display: none;
+            text-align: center;
+        }
+
+        .cronometro h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            transition: color 0.5s ease;
+        }
+
+        .tempo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tempo-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .tempo-numero {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .tempo-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .filmes {
+            display: none;
+        }
+
+        .filmes h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+
+        .tabela-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 2px solid #764ba2;
+            transition: border-color 0.5s ease;
+        }
+
+        .tabela-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .tabela-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+            transition: background 0.5s ease;
+        }
+
+        .tabela-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .coracao {
+            position: fixed;
+            font-size: 30px;
+            animation: flutuar 3s ease-in-out infinite;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* ===== ESTILO DA CAIXA FUTURO ===== */
+        #futuro {
+            display: none;
+            text-align: center;
+            border: 2px dashed #764ba2;
+        }
+
+        #futuro h2 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            transition: color 0.5s ease;
+        }
+
+        #futuro p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            transition: color 0.5s ease;
+        }
+
+        #futuro p:last-child {
+            font-size: 0.9em;
+            margin-top: 15px;
+            opacity: 0.8;
+            color: #764ba2;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes flutuar {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        .mensagem-final {
+            display: none;
+            text-align: center;
+            color: #764ba2;
+            font-size: 1.3em;
+            margin-top: 20px;
+            animation: fadeInUp 1s ease;
+            transition: color 0.5s ease;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .botoes {
+                flex-direction: column;
+            }
+            
+            .tempo {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .theme-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                top: 15px;
+                right: 15px;
+            }
+
+            #futuro p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão de Tema -->
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Alternar tema">
+        <span id="themeIcon">🌙</span>
+    </button>
+
+    <!-- Corações decorativos -->
+    <div class="coracao" style="top: 10%; left: 10%;">💕</div>
+    <div class="coracao" style="top: 20%; right: 15%; animation-delay: 0.5s;">💖</div>
+    <div class="coracao" style="bottom: 15%; left: 20%; animation-delay: 1s;">💗</div>
+    <div class="coracao" style="bottom: 25%; right: 10%; animation-delay: 1.5s;">💝</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>✨ Ismaelly ✨</h1>
+            <p>Tem algo especial que preciso te dizer...</p>
+        </div>
+
+        <div class="card pedido" id="pedido">
+            <h2> Uma Mensagem Especial </h2>
+            <p>
+                Desde que você entrou na minha vida, cada dia se tornou mais especial.
+                A forma como você é engraçada, como você se importa, como você é... 
+                tudo em você me conquista cada vez mais.
+            </p>
+            <p>
+                Eu me apaixonei pelo jeito que você me trata, pela pessoa incrível que você é,
+                e por cada momento que passamos juntos. Você trouxe luz e alegria para os meus dias.
+            </p>
+            <p>
+                Cada filme que assistimos, cada conversa que temos, cada clash no death ball, cada risada que compartilhamos...
+                tudo isso me faz ter certeza de que você é especial demais para mim.
+            </p>
+            
+            <p class="pergunta">💕 Você aceita namorar comigo? 💕</p>
+            
+            <div class="botoes">
+                <button class="btn-sim" onclick="aceitou()">Sim! 💖</button>
+                <button class="btn-nao" id="btnNao" onmouseover="fugirBotao()" onclick="alertaNao()">Não</button>
+            </div>
+            
+            <p class="mensagem-final" id="mensagemFinal">
+                🎉 Você me fez a pessoa mais feliz do mundo! 🎉<br>
+                Prometo te tratar como a princesa que você é todos os dias!
+            </p>
+        </div>
+
+        <div class="card cronometro" id="cronometro">
+            <h2>⏰ Nosso Tempo Juntos ⏰</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                Desde que você aceitou meus sentimentos
+            </p>
+            <div class="tempo">
+                <div class="tempo-item">
+                    <span class="tempo-numero" id="dias">0</span>
+                    <span class="tempo-label">Dias</span>
+                </div>
+                <div class="tempo-item">
+                    <span class="tempo-numero" id="horas">0</span>
+                    <span class="tempo-label">Horas</span>
+                </div>
+                <div class="tempo-item">
+                    <span class="tempo-numero" id="minutos">0</span>
+                    <span class="tempo-label">Minutos</span>
+                </div>
+                <div class="tempo-item">
+                    <span class="tempo-numero" id="segundos">0</span>
+                    <span class="tempo-label">Segundos</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card filmes" id="filmes">
+            <h2>🎬 Filmes que Assistimos Juntos 🎬</h2>
+            <div class="tabela-container">
+                <table id="tabelaFilmes">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Filme</th>
+                            <th>Data</th>
+                            <th>⭐</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaFilmes">
+                        <!-- Os filmes serão adicionados aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" id="futuro">
+            <h2>✨ Ainda tem muito pela frente ✨</h2>
+            <p>
+                Nossa história está apenas começando... 💕<br>
+                Em breve este espaço terá muito mais memórias, momentos especiais<br>
+                e tudo que construiremos juntos! 🌟
+            </p>
+            <p>
+                (Este site será atualizado com mais novidades em breve)
+            </p>
+        </div>
+    </div>
+
+    <script>
+        //  CONFIGURAÇÕES - EDITE AQUI!
+        
+        // DATA E HORA DO "SIM" 
+        // Formato: "YYYY-MM-DD HH:MM:SS"
+        // Exemplo: "2024-01-15 20:30:00" = 15 de janeiro de 2024 às 20:30
+        // IMPORTANTE: Esta data será usada para calcular quanto tempo já passou!
+        const DATA_INICIO = "2026-01-29 01:52:00";
+        
+        // 🎬 LISTA DE FILMES - Adicione os filmes aqui!
+        const FILMES = [
+            { nome: "Atividade Paranormal: Ente Próximo", data: "27/01/2026", nota: "⭐⭐⭐⭐"},
+            { nome: "Como Eu Era Antes de Você", data: "28/01/2026", nota: "⭐⭐⭐⭐⭐" },
+            { nome: "Invocação do Mal 4", data: "28/01/2026", nota: "⭐⭐⭐⭐⭐"},
+            { nome: "Bob Esponja", data: "28/01/2026", nota: "⭐⭐⭐⭐⭐"},
+            { nome: "Halloween Ends", data: "29/01/2026", nota: "⭐⭐⭐⭐⭐"},
+            { nome: "Bohemian Rhapsody", data: "29/01/2026", nota: "⭐⭐⭐"}
+            // Adicione mais filmes seguindo o formato acima
+        ];
+        
+        // 💻 CÓDIGO DO SITE - Não precisa mexer aqui
+        
+        // Função para alternar entre tema claro e escuro
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            body.classList.toggle('dark-mode');
+            
+            // Muda o ícone
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Carrega o tema salvo
+        function carregarTema() {
+            const temaSalvo = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (temaSalvo === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeIcon.textContent = '☀️';
+            }
+        }
+        
+        function aceitou() {
+            // Salva que ela aceitou
+            localStorage.setItem('aceitouPedido', 'true');
+            
+            // Mostra mensagem de felicidade
+            document.getElementById('mensagemFinal').style.display = 'block';
+            
+            // Esconde os botões
+            document.querySelector('.botoes').style.display = 'none';
+            document.querySelector('.pergunta').style.display = 'none';
+            
+            // Mostra o cronômetro e os filmes após 2 segundos
+            setTimeout(() => {
+                document.getElementById('cronometro').style.display = 'block';
+                document.getElementById('filmes').style.display = 'block';
+                document.getElementById('futuro').style.display = 'block';
+                iniciarCronometro();
+                carregarFilmes();
+                
+                // Scroll suave para o cronômetro
+                document.getElementById('cronometro').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 2000);
+            
+            // Cria explosão de corações
+            criarCoracoes();
+        }
+        
+        function fugirBotao() {
+            const btn = document.getElementById('btnNao');
+            const maxX = window.innerWidth - btn.offsetWidth - 40;
+            const maxY = window.innerHeight - btn.offsetHeight - 40;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            btn.style.position = 'fixed';
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+            btn.style.transition = 'all 0.3s ease';
+        }
+        
+        function alertaNao() {
+            alert('Ah não! O botão "Não" está quebrado! 😅💕\nParece que o destino quer que a gente fique junto! 💖');
+        }
+        
+        function iniciarCronometro() {
+            // SEMPRE usa a DATA_INICIO configurada no topo
+            const dataInicio = new Date(DATA_INICIO);
+            
+            // Atualiza imediatamente
+            atualizarCronometro(dataInicio);
+            
+            // Continua atualizando a cada segundo
+            setInterval(() => atualizarCronometro(dataInicio), 1000);
+        }
+        
+        function atualizarCronometro(dataInicio) {
+            const agora = new Date();
+            const diferenca = agora - dataInicio;
+            
+            // Calcula o tempo decorrido
+            const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+            
+            // Atualiza os números na tela
+            document.getElementById('dias').textContent = dias;
+            document.getElementById('horas').textContent = horas.toString().padStart(2, '0');
+            document.getElementById('minutos').textContent = minutos.toString().padStart(2, '0');
+            document.getElementById('segundos').textContent = segundos.toString().padStart(2, '0');
+        }
+        
+        function carregarFilmes() {
+            const tbody = document.getElementById('listaFilmes');
+            tbody.innerHTML = '';
+            
+            FILMES.forEach((filme, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${filme.nome}</td>
+                    <td>${filme.data}</td>
+                    <td>${filme.nota}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function criarCoracoes() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const coracao = document.createElement('div');
+                    coracao.textContent = ['💕', '💖', '💗', '💝', '❤️'][Math.floor(Math.random() * 5)];
+                    coracao.style.position = 'fixed';
+                    coracao.style.left = Math.random() * window.innerWidth + 'px';
+                    coracao.style.top = window.innerHeight + 'px';
+                    coracao.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                    coracao.style.transition = 'all 3s ease-out';
+                    coracao.style.zIndex = '9999';
+                    coracao.style.pointerEvents = 'none';
+                    
+                    document.body.appendChild(coracao);
+                    
+                    setTimeout(() => {
+                        coracao.style.top = '-100px';
+                        coracao.style.opacity = '0';
+                        coracao.style.transform = 'rotate(360deg)';
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        coracao.remove();
+                    }, 3100);
+                }, i * 100);
+            }
+        }
+        
+        // Quando a página carregar
+        window.onload = function() {
+            // Carrega o tema salvo
+            carregarTema();
+            
+            // Verifica se ela já aceitou anteriormente
+            const jaAceitou = localStorage.getItem('aceitouPedido');
+            if (jaAceitou === 'true') {
+                // Mostra tudo direto sem animações
+                document.getElementById('mensagemFinal').style.display = 'block';
+                document.querySelector('.botoes').style.display = 'none';
+                document.querySelector('.pergunta').style.display = 'none';
+                document.getElementById('cronometro').style.display = 'block';
+                document.getElementById('filmes').style.display = 'block';
+                document.getElementById('futuro').style.display = 'block';
+                
+                // Inicia o cronômetro com a DATA_INICIO
+                iniciarCronometro();
+                carregarFilmes();
+            }
+        }
+    </script>
+</body>
+</html>
