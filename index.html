@@ -2,14 +2,19 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Minha Amada </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Minha Amada</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50,90 C50,90 10,60 10,35 C10,20 20,10 30,10 C40,10 45,15 50,25 C55,15 60,10 70,10 C80,10 90,20 90,35 C90,60 50,90 50,90 Z' fill='%233b82f6'/></svg>">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -33,7 +38,8 @@
 
         body.dark-mode .pedido h2,
         body.dark-mode .cronometro h2,
-        body.dark-mode .filmes h2 {
+        body.dark-mode .filmes h2,
+        body.dark-mode .secao-titulo {
             color: #9d84b7;
         }
 
@@ -79,58 +85,122 @@
             color: #c4c4c4;
         }
 
-        /* ===== BOTÃO DE TEMA ===== */
-        .theme-toggle {
+        body.dark-mode .filme-descricao {
+            background: #1a1a2e;
+            border-left-color: #9d84b7;
+        }
+
+        body.dark-mode .modal-content {
+            background: #0f3460;
+            color: #e4e4e4;
+        }
+
+        body.dark-mode .modal-content h3 {
+            color: #9d84b7;
+        }
+
+        body.dark-mode .timeline-item {
+            border-left-color: #9d84b7;
+        }
+
+        body.dark-mode .timeline-dot {
+            background: #9d84b7;
+        }
+
+        body.dark-mode .timeline-content {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .musica-item,
+        body.dark-mode .jogo-item,
+        body.dark-mode .bucket-item {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .bucket-item.completed {
+            background: rgba(157, 132, 183, 0.2);
+        }
+
+        /* ===== BOTÕES FIXOS ===== */
+        .fixed-buttons {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .theme-toggle,
+        .lang-toggle {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: white;
             border: none;
             cursor: pointer;
-            font-size: 28px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: all 0.3s ease;
-            z-index: 1000;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(20deg);
+        .theme-toggle:hover,
+        .lang-toggle:hover {
+            transform: scale(1.1) rotate(10deg);
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        body.dark-mode .theme-toggle {
+        .theme-toggle:active,
+        .lang-toggle:active {
+            transform: scale(0.95);
+        }
+
+        body.dark-mode .theme-toggle,
+        body.dark-mode .lang-toggle {
             background: #0f3460;
+            color: white;
+        }
+
+        .lang-toggle {
+            font-size: 12px;
+            font-weight: bold;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            padding-top: 60px;
         }
 
         .header {
             text-align: center;
             color: white;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             animation: fadeInDown 1s ease;
+            padding: 0 10px;
         }
 
         .header h1 {
-            font-size: 3em;
+            font-size: clamp(1.8rem, 8vw, 3rem);
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            word-break: break-word;
+        }
+
+        .header p {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
         }
 
         .card {
             background: white;
             border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
+            padding: clamp(20px, 5vw, 40px);
+            margin-bottom: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             animation: fadeInUp 1s ease;
             transition: all 0.5s ease;
@@ -143,46 +213,51 @@
         .pedido h2 {
             color: #2563eb;
             margin-bottom: 20px;
-            font-size: 2em;
+            font-size: clamp(1.3rem, 5vw, 2rem);
             transition: color 0.5s ease;
         }
 
         .pedido p {
             color: #555;
             line-height: 1.8;
-            font-size: 1.1em;
-            margin-bottom: 20px;
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+            margin-bottom: 15px;
             transition: color 0.5s ease;
+            text-align: justify;
+            hyphens: auto;
         }
 
         .pergunta {
-            font-size: 1.5em;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             color: #3b82f6;
             font-weight: bold;
-            margin: 30px 0 20px 0;
+            margin: 25px 0 20px 0;
             transition: color 0.5s ease;
         }
 
         .botoes {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 15px 40px;
-            font-size: 1.2em;
+            padding: 12px 30px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-sim {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
+            min-width: 140px;
         }
 
         .btn-sim:hover {
@@ -190,10 +265,15 @@
             box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
         }
 
+        .btn-sim:active {
+            transform: scale(1.05);
+        }
+
         .btn-nao {
             background: #ddd;
             color: #666;
             position: relative;
+            min-width: 100px;
         }
 
         .cronometro {
@@ -203,33 +283,33 @@
 
         .cronometro h2 {
             color: #2563eb;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             transition: color 0.5s ease;
         }
 
         .tempo {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
         }
 
         .tempo-item {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
-            padding: 20px;
-            border-radius: 15px;
+            padding: clamp(12px, 3vw, 20px);
+            border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .tempo-numero {
-            font-size: 2.5em;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
             font-weight: bold;
             display: block;
         }
 
         .tempo-label {
-            font-size: 0.9em;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
             opacity: 0.9;
         }
 
@@ -237,23 +317,27 @@
             display: none;
         }
 
-        .filmes h2 {
+        .secao-titulo {
             color: #2563eb;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
             transition: color 0.5s ease;
         }
 
         .tabela-container {
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
+            overflow-x: auto;
             border-radius: 10px;
             border: 2px solid #2563eb;
             transition: border-color 0.5s ease;
+            -webkit-overflow-scrolling: touch;
         }
 
         .tabela-container::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
+            height: 8px;
         }
 
         .tabela-container::-webkit-scrollbar-track {
@@ -270,34 +354,404 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 300px;
         }
 
         th {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
-            padding: 15px;
+            padding: 12px 8px;
             text-align: left;
             position: sticky;
             top: 0;
             z-index: 10;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            white-space: nowrap;
         }
 
         td {
-            padding: 12px 15px;
+            padding: 10px 8px;
             border-bottom: 1px solid #ddd;
             transition: all 0.3s ease;
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
         }
 
-        tr:hover {
-            background: #f5f5f5;
+        /* Coluna do número menor */
+        td:first-child,
+        th:first-child {
+            width: 30px;
+            text-align: center;
+        }
+
+        /* Coluna da nota menor */
+        td:last-child,
+        th:last-child {
+            width: 60px;
+            text-align: center;
+        }
+
+        tr.filme-row {
+            cursor: pointer;
+        }
+
+        tr.filme-row:hover {
+            background: #f0f7ff;
+        }
+
+        tr.filme-row:active {
+            background: #e0efff;
+        }
+
+        body.dark-mode tr.filme-row:hover {
+            background: #16213e;
+        }
+
+        .filme-descricao {
+            display: none;
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-left: 4px solid #3b82f6;
+            margin: 0;
+            animation: slideDown 0.3s ease;
+        }
+
+        .filme-descricao td {
+            padding: 15px 20px;
+            font-style: italic;
+            color: #555;
+        }
+
+        body.dark-mode .filme-descricao td {
+            color: #c4c4c4;
+        }
+
+        .filme-descricao.show {
+            display: table-row;
+        }
+
+        .click-hint {
+            text-align: center;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            color: #888;
+            margin-top: 10px;
         }
 
         .coracao {
             position: fixed;
-            font-size: 30px;
+            font-size: 24px;
             animation: flutuar 3s ease-in-out infinite;
-            opacity: 0.7;
+            opacity: 0.6;
             pointer-events: none;
+        }
+
+        /* ===== MODAL PARA DESCRIÇÃO DO FILME ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: clamp(20px, 5vw, 30px);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.1);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px 10px;
+            line-height: 1;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(0,0,0,0.2);
+        }
+
+        .modal-content h3 {
+            color: #2563eb;
+            margin-bottom: 10px;
+            padding-right: 40px;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        }
+
+        .modal-content .modal-data {
+            color: #888;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            margin-bottom: 15px;
+        }
+
+        .modal-content .modal-nota {
+            margin-bottom: 15px;
+        }
+
+        .modal-content .modal-descricao {
+            line-height: 1.7;
+            color: #555;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+
+        body.dark-mode .modal-content .modal-descricao {
+            color: #c4c4c4;
+        }
+
+        /* ===== TIMELINE DE MOMENTOS ===== */
+        .timeline {
+            display: none;
+        }
+
+        .timeline-container {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 25px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 20px;
+            margin-left: 8px;
+        }
+
+        .timeline-item:last-child {
+            border-left: 3px solid transparent;
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            background: #3b82f6;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        body.dark-mode .timeline-dot {
+            border-color: #0f3460;
+        }
+
+        .timeline-content {
+            background: #f8fafc;
+            padding: clamp(12px, 3vw, 20px);
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-content h4 {
+            color: #2563eb;
+            margin-bottom: 5px;
+            font-size: clamp(0.95rem, 3vw, 1.1rem);
+        }
+
+        body.dark-mode .timeline-content h4 {
+            color: #9d84b7;
+        }
+
+        .timeline-content .timeline-data {
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content p {
+            color: #555;
+            line-height: 1.6;
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+        }
+
+        body.dark-mode .timeline-content p {
+            color: #c4c4c4;
+        }
+
+        /* ===== PLAYLIST DE MÚSICAS ===== */
+        .playlist {
+            display: none;
+        }
+
+        .musicas-container {
+            display: grid;
+            gap: 12px;
+        }
+
+        .musica-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: clamp(12px, 3vw, 15px);
+            background: #f8fafc;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .musica-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .musica-icon {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            flex-shrink: 0;
+        }
+
+        .musica-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .musica-info h4 {
+            color: #2563eb;
+            margin-bottom: 3px;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            word-break: break-word;
+        }
+
+        body.dark-mode .musica-info h4 {
+            color: #9d84b7;
+        }
+
+        .musica-info p {
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            color: #888;
+        }
+
+        .musica-motivo {
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            color: #555;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        body.dark-mode .musica-motivo {
+            color: #c4c4c4;
+        }
+
+        /* ===== JOGOS JUNTOS ===== */
+        .jogos {
+            display: none;
+        }
+
+        .jogos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .jogo-item {
+            background: #f8fafc;
+            padding: clamp(15px, 3vw, 20px);
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .jogo-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .jogo-item:active {
+            transform: translateY(0);
+        }
+
+        .jogo-icon {
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            margin-bottom: 8px;
+        }
+
+        .jogo-item h4 {
+            color: #2563eb;
+            margin-bottom: 5px;
+            font-size: clamp(0.9rem, 3vw, 1rem);
+        }
+
+        body.dark-mode .jogo-item h4 {
+            color: #9d84b7;
+        }
+
+        .jogo-item p {
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            color: #888;
+        }
+
+        /* ===== BUCKET LIST ===== */
+        .bucket-list {
+            display: none;
+        }
+
+        .bucket-container {
+            display: grid;
+            gap: 10px;
+        }
+
+        .bucket-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: clamp(12px, 3vw, 15px) clamp(12px, 3vw, 20px);
+            background: #f8fafc;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .bucket-item.completed {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .bucket-item.completed .bucket-text {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .bucket-checkbox {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            flex-shrink: 0;
+        }
+
+        .bucket-text {
+            flex: 1;
+            color: #333;
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+        }
+
+        body.dark-mode .bucket-text {
+            color: #e4e4e4;
+        }
+
+        .bucket-data {
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
+            color: #888;
+            flex-shrink: 0;
         }
 
         /* ===== ESTILO DA CAIXA FUTURO ===== */
@@ -309,23 +763,95 @@
 
         #futuro h2 {
             color: #2563eb;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+            margin-bottom: 12px;
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
             transition: color 0.5s ease;
         }
 
         #futuro p {
             color: #666;
-            font-size: 1.1em;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             line-height: 1.6;
             transition: color 0.5s ease;
         }
 
         #futuro p:last-child {
-            font-size: 0.9em;
-            margin-top: 15px;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            margin-top: 12px;
             opacity: 0.8;
             color: #2563eb;
+        }
+
+        /* ===== NAVEGAÇÃO POR ABAS ===== */
+        .tabs-container {
+            display: none;
+            margin-bottom: 20px;
+            padding: 0 5px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .tab-btn:active {
+            transform: scale(0.95);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #2563eb;
+        }
+
+        body.dark-mode .tab-btn.active {
+            background: #0f3460;
+            color: #9d84b7;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 200px;
+            }
         }
 
         @keyframes fadeInDown {
@@ -363,124 +889,369 @@
             display: none;
             text-align: center;
             color: #2563eb;
-            font-size: 1.3em;
+            font-size: clamp(1rem, 3vw, 1.3rem);
             margin-top: 20px;
             animation: fadeInUp 1s ease;
             transition: color 0.5s ease;
         }
 
-        @media (max-width: 600px) {
-            .header h1 {
-                font-size: 2em;
+        /* ===== MEDIA QUERIES PARA RESPONSIVIDADE ===== */
+        
+        /* Tablets pequenos e celulares grandes */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
             }
-            
+
+            .container {
+                padding-top: 50px;
+            }
+
+            .fixed-buttons {
+                top: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+
+            .theme-toggle,
+            .lang-toggle {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+
+            .lang-toggle {
+                font-size: 11px;
+            }
+
             .card {
-                padding: 20px;
+                border-radius: 15px;
+                margin-bottom: 15px;
             }
-            
+
+            .tempo {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+
+            .tabs {
+                gap: 6px;
+            }
+
+            .tab-btn {
+                padding: 8px 12px;
+            }
+
+            .coracao {
+                font-size: 20px;
+            }
+        }
+
+        /* Celulares */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding-top: 45px;
+            }
+
+            .header {
+                margin-bottom: 20px;
+            }
+
+            .fixed-buttons {
+                top: 8px;
+                right: 8px;
+                gap: 6px;
+            }
+
+            .theme-toggle,
+            .lang-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .lang-toggle {
+                font-size: 10px;
+            }
+
+            .card {
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 12px;
+            }
+
             .botoes {
                 flex-direction: column;
+                gap: 10px;
             }
-            
+
+            .btn-sim,
+            .btn-nao {
+                width: 100%;
+                max-width: 200px;
+                margin: 0 auto;
+            }
+
             .tempo {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .tempo-item {
+                padding: 10px;
+                border-radius: 10px;
+            }
+
+            .tabela-container {
+                max-height: 300px;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+
+            .jogos-container {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .theme-toggle {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-                top: 15px;
-                right: 15px;
+            .timeline-container {
+                padding-left: 15px;
             }
 
-            #futuro p {
-                font-size: 1em;
+            .timeline-item {
+                padding-left: 15px;
+                margin-left: 5px;
+            }
+
+            .timeline-dot {
+                width: 14px;
+                height: 14px;
+                left: -8px;
+                border-width: 2px;
+            }
+
+            /* Esconde alguns corações em telas pequenas */
+            .coracao:nth-child(3),
+            .coracao:nth-child(4) {
+                display: none;
+            }
+        }
+
+        /* Celulares muito pequenos */
+        @media (max-width: 360px) {
+            html {
+                font-size: 14px;
+            }
+
+            .card {
+                padding: 12px;
+            }
+
+            .tempo {
+                gap: 6px;
+            }
+
+            .tabs {
+                gap: 4px;
+            }
+
+            .tab-btn {
+                padding: 6px 10px;
+                font-size: 0.7rem;
+            }
+
+            .jogos-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Landscape em celulares */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding-top: 10px;
+            }
+
+            .header {
+                margin-bottom: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .fixed-buttons {
+                flex-direction: row;
+                top: 5px;
+            }
+
+            .tempo {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .modal-content {
+                max-height: 90vh;
+            }
+
+            .coracao {
+                display: none;
+            }
+        }
+
+        /* Suporte para telas com notch */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            body {
+                padding-top: calc(20px + env(safe-area-inset-top));
+                padding-left: calc(10px + env(safe-area-inset-left));
+                padding-right: calc(10px + env(safe-area-inset-right));
+                padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            }
+
+            .fixed-buttons {
+                top: calc(10px + env(safe-area-inset-top));
+                right: calc(10px + env(safe-area-inset-right));
+            }
+        }
+
+        /* Preferência por movimento reduzido */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .coracao {
+                display: none;
+            }
+        }
+
+        /* Melhorar legibilidade em modo de alto contraste */
+        @media (prefers-contrast: high) {
+            .card {
+                border: 2px solid #000;
+            }
+
+            body.dark-mode .card {
+                border: 2px solid #fff;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Botão de Tema -->
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Alternar tema">
-        <span id="themeIcon">🌙</span>
-    </button>
+    <!-- Botões Fixos -->
+    <div class="fixed-buttons">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Alternar tema" aria-label="Alternar tema claro/escuro">
+            <span id="themeIcon">🌙</span>
+        </button>
+        <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" title="Change language" aria-label="Mudar idioma">
+            <span id="langIcon">EN</span>
+        </button>
+    </div>
+
+    <!-- Modal para descrição do filme -->
+    <div class="modal-overlay" id="modalFilme" onclick="fecharModalFilme(event)" role="dialog" aria-modal="true">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="fecharModal()" aria-label="Fechar modal">&times;</button>
+            <h3 id="modalTitulo">Título do Filme</h3>
+            <p class="modal-data" id="modalData">Data</p>
+            <p class="modal-nota" id="modalNota">⭐⭐⭐⭐⭐</p>
+            <p class="modal-descricao" id="modalDescricao">Descrição do filme...</p>
+        </div>
+    </div>
 
     <!-- Corações decorativos -->
-    <div class="coracao" style="top: 10%; left: 10%;">💕</div>
-    <div class="coracao" style="top: 20%; right: 15%; animation-delay: 0.5s;">💖</div>
-    <div class="coracao" style="bottom: 15%; left: 20%; animation-delay: 1s;">💗</div>
-    <div class="coracao" style="bottom: 25%; right: 10%; animation-delay: 1.5s;">💝</div>
+    <div class="coracao" style="top: 10%; left: 5%;" aria-hidden="true">💕</div>
+    <div class="coracao" style="top: 20%; right: 10%; animation-delay: 0.5s;" aria-hidden="true">💖</div>
+    <div class="coracao" style="bottom: 15%; left: 15%; animation-delay: 1s;" aria-hidden="true">💗</div>
+    <div class="coracao" style="bottom: 25%; right: 5%; animation-delay: 1.5s;" aria-hidden="true">💝</div>
 
     <div class="container">
         <div class="header">
             <h1>✨ Ismaelly ✨</h1>
-            <p>Tem algo especial que preciso te dizer...</p>
+            <p data-translate="header-subtitle">Tem algo especial que preciso te dizer...</p>
         </div>
 
         <div class="card pedido" id="pedido">
-            <h2> Uma Mensagem Especial </h2>
-            <p>
+            <h2 data-translate="special-message">💌 Uma Mensagem Especial 💌</h2>
+            <p data-translate="message-1">
                 Desde que você entrou na minha vida, cada dia se tornou mais especial.
                 A forma como você é engraçada, como você se importa, como você é... 
                 tudo em você me conquista cada vez mais.
             </p>
-            <p>
+            <p data-translate="message-2">
                 Eu me apaixonei pelo jeito que você me trata, pela pessoa incrível que você é,
                 e por cada momento que passamos juntos. Você trouxe luz e alegria para os meus dias.
             </p>
-            <p>
+            <p data-translate="message-3">
                 Cada filme que assistimos, cada conversa que temos, cada clash no death ball, cada risada que compartilhamos...
                 tudo isso me faz ter certeza de que você é especial demais para mim.
             </p>
             
-            <p class="pergunta">💕 Você aceita namorar comigo? 💕</p>
+            <p class="pergunta" data-translate="question">💕 Você aceita namorar comigo? 💕</p>
             
             <div class="botoes">
-                <button class="btn-sim" onclick="aceitou()">Sim! 💖</button>
-                <button class="btn-nao" id="btnNao" onmouseover="fugirBotao()" onclick="alertaNao()">Não</button>
+                <button class="btn-sim" onclick="aceitou()" data-translate="btn-yes">Sim! 💖</button>
+                <button class="btn-nao" id="btnNao" onmouseover="fugirBotao()" ontouchstart="fugirBotao()" onclick="alertaNao()" data-translate="btn-no">Não</button>
             </div>
             
-            <p class="mensagem-final" id="mensagemFinal">
+            <p class="mensagem-final" id="mensagemFinal" data-translate="final-message">
                 🎉 Você me fez a pessoa mais feliz do mundo! 🎉<br>
                 Prometo te tratar como a princesa que você é todos os dias!
             </p>
         </div>
 
-        <div class="card cronometro" id="cronometro">
-            <h2>⏰ Nosso Tempo Juntos ⏰</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 20px;">
+        <!-- Navegação por Abas -->
+        <div class="tabs-container" id="tabsContainer">
+            <div class="tabs" role="tablist">
+                <button class="tab-btn active" onclick="mostrarSecao('cronometro', this)" data-translate="tab-timer" role="tab" aria-selected="true">⏰ Tempo</button>
+                <button class="tab-btn" onclick="mostrarSecao('filmes', this)" data-translate="tab-movies" role="tab" aria-selected="false">🎬 Filmes</button>
+                <button class="tab-btn" onclick="mostrarSecao('timeline', this)" data-translate="tab-moments" role="tab" aria-selected="false">💕 Momentos</button>
+                <button class="tab-btn" onclick="mostrarSecao('playlist', this)" data-translate="tab-music" role="tab" aria-selected="false">🎵 Músicas</button>
+                <button class="tab-btn" onclick="mostrarSecao('jogos', this)" data-translate="tab-games" role="tab" aria-selected="false">🎮 Jogos</button>
+                <button class="tab-btn" onclick="mostrarSecao('bucket', this)" data-translate="tab-bucket" role="tab" aria-selected="false">✨ Bucket List</button>
+            </div>
+        </div>
+
+        <div class="card cronometro" id="cronometro" role="tabpanel">
+            <h2 class="secao-titulo" data-translate="timer-title">⏰ Nosso Tempo Juntos ⏰</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 15px; font-size: clamp(0.85rem, 2.5vw, 1rem);" data-translate="timer-subtitle">
                 Desde que você aceitou meus sentimentos
             </p>
             <div class="tempo">
                 <div class="tempo-item">
                     <span class="tempo-numero" id="dias">0</span>
-                    <span class="tempo-label">Dias</span>
+                    <span class="tempo-label" data-translate="days">Dias</span>
                 </div>
                 <div class="tempo-item">
                     <span class="tempo-numero" id="horas">0</span>
-                    <span class="tempo-label">Horas</span>
+                    <span class="tempo-label" data-translate="hours">Horas</span>
                 </div>
                 <div class="tempo-item">
                     <span class="tempo-numero" id="minutos">0</span>
-                    <span class="tempo-label">Minutos</span>
+                    <span class="tempo-label" data-translate="minutes">Minutos</span>
                 </div>
                 <div class="tempo-item">
                     <span class="tempo-numero" id="segundos">0</span>
-                    <span class="tempo-label">Segundos</span>
+                    <span class="tempo-label" data-translate="seconds">Segundos</span>
                 </div>
             </div>
         </div>
 
-        <div class="card filmes" id="filmes">
-            <h2>🎬 Filmes que Assistimos Juntos 🎬</h2>
+        <div class="card filmes" id="filmes" role="tabpanel">
+            <h2 class="secao-titulo" data-translate="movies-title">🎬 Filmes que Assistimos Juntos 🎬</h2>
             <div class="tabela-container">
                 <table id="tabelaFilmes">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Filme</th>
-                            <th>Data</th>
+                            <th data-translate="movie">Filme</th>
+                            <th data-translate="date">Data</th>
                             <th>⭐</th>
                         </tr>
                     </thead>
@@ -489,51 +1260,317 @@
                     </tbody>
                 </table>
             </div>
+            <p class="click-hint" data-translate="click-hint">👆 Clique em um filme para ver o que achamos!</p>
+        </div>
+
+        <!-- Nova Seção: Linha do Tempo de Momentos -->
+        <div class="card timeline" id="timeline" role="tabpanel">
+            <h2 class="secao-titulo" data-translate="moments-title">💕 Nossos Momentos Especiais 💕</h2>
+            <div class="timeline-container" id="timelineContainer">
+                <!-- Momentos serão adicionados aqui -->
+            </div>
+        </div>
+
+        <!-- Nova Seção: Playlist de Músicas -->
+        <div class="card playlist" id="playlist" role="tabpanel">
+            <h2 class="secao-titulo" data-translate="music-title">🎵 Nossas Músicas 🎵</h2>
+            <div class="musicas-container" id="musicasContainer">
+                <!-- Músicas serão adicionadas aqui -->
+            </div>
+        </div>
+
+        <!-- Nova Seção: Jogos Juntos -->
+        <div class="card jogos" id="jogos" role="tabpanel">
+            <h2 class="secao-titulo" data-translate="games-title">🎮 Jogos que Jogamos Juntos 🎮</h2>
+            <div class="jogos-container" id="jogosContainer">
+                <!-- Jogos serão adicionados aqui -->
+            </div>
+        </div>
+
+        <!-- Nova Seção: Bucket List -->
+        <div class="card bucket-list" id="bucket" role="tabpanel">
+            <h2 class="secao-titulo" data-translate="bucket-title">✨ Coisas que Queremos Fazer Juntos ✨</h2>
+            <div class="bucket-container" id="bucketContainer">
+                <!-- Itens serão adicionados aqui -->
+            </div>
         </div>
 
         <div class="card" id="futuro">
-            <h2>✨ Ainda tem muito pela frente ✨</h2>
-            <p>
+            <h2 data-translate="future-title">✨ Ainda tem muito pela frente ✨</h2>
+            <p data-translate="future-text">
                 Nossa história está apenas começando... 💕<br>
                 Em breve este espaço terá muito mais memórias, momentos especiais<br>
                 e tudo que construiremos juntos! 🌟
             </p>
-            <p>
+            <p data-translate="future-update">
                 (Este site será atualizado com mais novidades em breve)
             </p>
         </div>
     </div>
 
     <script>
-        //  CONFIGURAÇÕES - EDITE AQUI!
+        // ========================
+        // 📝 CONFIGURAÇÕES - EDITE AQUI!
+        // ========================
         
-        // DATA E HORA DO "SIM" 
-        // Formato: "YYYY-MM-DD HH:MM:SS"
-        // Exemplo: "2024-01-15 20:30:00" = 15 de janeiro de 2024 às 20:30
-        // IMPORTANTE: Esta data será usada para calcular quanto tempo já passou!
+        // DATA E HORA DO "SIM"
+        // É 2026-01-29 01:52:00, NÃO SEI PQ RESETA PRA 2025 AS VEZES
         const DATA_INICIO = "2026-01-29 01:52:00";
         
-        // 🎬 LISTA DE FILMES - Adicione os filmes aqui!
+        // 🎬 LISTA DE FILMES COM DESCRIÇÕES
         const FILMES = [
-            { nome: "Atividade Paranormal: Ente Próximo", data: "27/01/2026", nota: "⭐⭐⭐⭐"},
-            { nome: "Como Eu Era Antes de Você", data: "28/01/2026", nota: "⭐⭐⭐⭐⭐" },
-            { nome: "Invocação do Mal 4", data: "28/01/2026", nota: "⭐⭐⭐⭐⭐"},
-            { nome: "Bob Esponja", data: "28/01/2026", nota: "⭐⭐⭐⭐⭐"},
-            { nome: "Halloween Ends", data: "29/01/2026", nota: "⭐⭐⭐⭐⭐"},
-            { nome: "Bohemian Rhapsody", data: "29/01/2026", nota: "⭐⭐⭐"}
-            // Adicione mais filmes seguindo o formato acima
+            { 
+                nome: "Atividade Paranormal: Ente Próximo", 
+                data: "27/01/2025", 
+                nota: "⭐⭐⭐⭐",
+                descricao: "Nosso primeiro filme de terror juntos! Foi muito divertido assistir com você."
+            },
+            { 
+                nome: "Como Eu Era Antes de Você", 
+                data: "28/01/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "Esse filme é absurdo de bom..."
+            },
+            { 
+                nome: "Invocação do Mal 4", 
+                data: "28/01/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "Mais um filme de terror!"
+            },
+            { 
+                nome: "Bob Esponja", 
+                data: "28/01/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "Depois de tanto terror, você precisava de algo leve!"
+            },
+            { 
+                nome: "Halloween Ends", 
+                data: "29/01/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "Michael Myers tomou pau pra velha."
+            },
+            { 
+                nome: "Bohemian Rhapsody", 
+                data: "29/01/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "A história do Queen! Cantei junto todas as músicas em segredo. Você dormiu no meio..."
+            },
+            { 
+                nome: "Until Dawn", 
+                data: "30/01/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "Ficamos julgando as escolhas e como estava diferente do jogo."
+            },
+            { 
+                nome: "O Chamado 3", 
+                data: "05/02/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "."
+            },
+            { 
+                nome: "O Chamado (1998)", 
+                data: "05/02/2025", 
+                nota: "⭐⭐⭐⭐",
+                descricao: "."
+            },
+            { 
+                nome: "La La Land", 
+                data: "05/02/2025", 
+                nota: "⭐⭐⭐⭐⭐",
+                descricao: "Um ótimo filme! Você chorou..."
+            },
+            { 
+                nome: "Coraline", 
+                data: "05/02/2025", 
+                nota: "1000/1000",
+                descricao: "SEU FILME FAVORITO! A animação é incrível."
+            }
         ];
+
+        // 💕 MOMENTOS ESPECIAIS (LINHA DO TEMPO)
+        const MOMENTOS = [
+            {
+                titulo: "Primeiro Contato",
+                data: "25/01/2025",
+                descricao: "O dia em que começamos a conversar. Quem diria que seria o início de algo tão especial?"
+            },
+            {
+                titulo: "Primeira Chamada",
+                data: "27/01/2025",
+                descricao: "Nossa primeira ligação!"
+            },
+            {
+                titulo: "Primeiro Filme Juntos",
+                data: "27/01/2025",
+                descricao: "Atividade Paranormal foi nosso primeiro filme! O início de uma tradição."
+            },
+            {
+                titulo: "O Pedido de Namoro",
+                data: "29/01/2025",
+                descricao: "O dia mais especial! Você disse sim e meu coração explodiu de felicidade."
+            }
+            // Adicione mais momentos aqui!
+        ];
+
+        // 🎵 NOSSAS MÚSICAS
+        const MUSICAS = [
+            {
+                nome: "I Was Made For Lovin' You",
+                artista: "KISS",
+                motivo: "O título deve explicar, né?",
+                emoji: "💕"
+            },
+            {
+                nome: "No More Tears",
+                artista: "Ozzy Osbourne",
+                motivo: "(não deu um motivo)",
+                emoji: "🎶"
+            },
+            {
+                nome: "Teen Romance",
+                artista: "Lil Peep",
+                motivo: "Eu amo minha namorada!",
+                emoji: "💜"
+            }
+            // Adicione mais músicas aqui!
+        ];
+
+        // 🎮 JOGOS JUNTOS
+        const JOGOS = [
+            {
+                nome: "Death Ball",
+                emoji: "💀",
+                descricao: "Eu perdendo todo clash..."
+            },
+            {
+                nome: "Violence District",
+                emoji: "🩸",
+                descricao: "DBD?"
+            }
+            // Adicione mais jogos aqui!
+        ];
+
+        // ✨ BUCKET LIST (coisas para fazer juntos)
+        const BUCKET_LIST = [
+            { texto: "Começar a namorar", completo: true},
+            { texto: "Assistir 50 filmes juntos", completo: false },
+            { texto: "Ter um encontro presencial", completo: false },
+            { texto: "Viajar juntos", completo: false },
+            { texto: "Ver o pôr do sol abraçadinhos", completo: false },
+            { texto: "Cozinhar algo juntos", completo: false },
+            { texto: "Maratonar uma série inteira", completo: false }
+            // Adicione mais itens aqui!
+        ];
+
+        // ========================
+        // 🌐 SISTEMA DE TRADUÇÃO
+        // ========================
         
-        // 💻 CÓDIGO DO SITE - Não precisa mexer aqui
+        let idiomaAtual = 'pt';
         
-        // Função para alternar entre tema claro e escuro
+        const TRADUCOES = {
+            en: {
+                'header-subtitle': 'There\'s something special I need to tell you...',
+                'special-message': '💌 A Special Message 💌',
+                'message-1': 'Since you came into my life, every day has become more special. The way you are funny, the way you care, the way you are... everything about you conquers me more and more.',
+                'message-2': 'I fell in love with the way you treat me, the incredible person you are, and every moment we spend together. You brought light and joy to my days.',
+                'message-3': 'Every movie we watch, every conversation we have, every clash in death ball, every laugh we share... all of this makes me sure that you are too special to me.',
+                'question': '💕 Will you be my girlfriend? 💕',
+                'btn-yes': 'Yes! 💖',
+                'btn-no': 'No',
+                'final-message': '🎉 You made me the happiest person in the world! 🎉<br>I promise to treat you like the princess you are every day!',
+                'tab-timer': '⏰ Time',
+                'tab-movies': '🎬 Movies',
+                'tab-moments': '💕 Moments',
+                'tab-music': '🎵 Music',
+                'tab-games': '🎮 Games',
+                'tab-bucket': '✨ Bucket List',
+                'timer-title': '⏰ Our Time Together ⏰',
+                'timer-subtitle': 'Since you accepted my feelings',
+                'days': 'Days',
+                'hours': 'Hours',
+                'minutes': 'Minutes',
+                'seconds': 'Seconds',
+                'movies-title': '🎬 Movies We Watched Together 🎬',
+                'movie': 'Movie',
+                'date': 'Date',
+                'click-hint': '👆 Click on a movie to see what we thought!',
+                'moments-title': '💕 Our Special Moments 💕',
+                'music-title': '🎵 Our Songs 🎵',
+                'games-title': '🎮 Games We Played Together 🎮',
+                'bucket-title': '✨ Things We Want to Do Together ✨',
+                'future-title': '✨ There\'s still a lot ahead ✨',
+                'future-text': 'Our story is just beginning... 💕<br>Soon this space will have many more memories, special moments<br>and everything we\'ll build together! 🌟',
+                'future-update': '(This site will be updated with more news soon)'
+            },
+            pt: {
+                'header-subtitle': 'Tem algo especial que preciso te dizer...',
+                'special-message': '💌 Uma Mensagem Especial 💌',
+                'message-1': 'Desde que você entrou na minha vida, cada dia se tornou mais especial. A forma como você é engraçada, como você se importa, como você é... tudo em você me conquista cada vez mais.',
+                'message-2': 'Eu me apaixonei pelo jeito que você me trata, pela pessoa incrível que você é, e por cada momento que passamos juntos. Você trouxe luz e alegria para os meus dias.',
+                'message-3': 'Cada filme que assistimos, cada conversa que temos, cada clash no death ball, cada risada que compartilhamos... tudo isso me faz ter certeza de que você é especial demais para mim.',
+                'question': '💕 Você aceita namorar comigo? 💕',
+                'btn-yes': 'Sim! 💖',
+                'btn-no': 'Não',
+                'final-message': '🎉 Você me fez a pessoa mais feliz do mundo! 🎉<br>Prometo te tratar como a princesa que você é todos os dias!',
+                'tab-timer': '⏰ Tempo',
+                'tab-movies': '🎬 Filmes',
+                'tab-moments': '💕 Momentos',
+                'tab-music': '🎵 Músicas',
+                'tab-games': '🎮 Jogos',
+                'tab-bucket': '✨ Bucket List',
+                'timer-title': '⏰ Nosso Tempo Juntos ⏰',
+                'timer-subtitle': 'Desde que você aceitou meus sentimentos',
+                'days': 'Dias',
+                'hours': 'Horas',
+                'minutes': 'Minutos',
+                'seconds': 'Segundos',
+                'movies-title': '🎬 Filmes que Assistimos Juntos 🎬',
+                'movie': 'Filme',
+                'date': 'Data',
+                'click-hint': '👆 Clique em um filme para ver o que achamos!',
+                'moments-title': '💕 Nossos Momentos Especiais 💕',
+                'music-title': '🎵 Nossas Músicas 🎵',
+                'games-title': '🎮 Jogos que Jogamos Juntos 🎮',
+                'bucket-title': '✨ Coisas que Queremos Fazer Juntos ✨',
+                'future-title': '✨ Ainda tem muito pela frente ✨',
+                'future-text': 'Nossa história está apenas começando... 💕<br>Em breve este espaço terá muito mais memórias, momentos especiais<br>e tudo que construiremos juntos! 🌟',
+                'future-update': '(Este site será atualizado com mais novidades em breve)'
+            }
+        };
+
+        function toggleLanguage() {
+            idiomaAtual = idiomaAtual === 'pt' ? 'en' : 'pt';
+            document.getElementById('langIcon').textContent = idiomaAtual === 'pt' ? 'EN' : 'PT';
+            
+            // Traduz todos os elementos
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (TRADUCOES[idiomaAtual][key]) {
+                    el.innerHTML = TRADUCOES[idiomaAtual][key];
+                }
+            });
+            
+            localStorage.setItem('idioma', idiomaAtual);
+        }
+
+        function carregarIdioma() {
+            const idiomaSalvo = localStorage.getItem('idioma');
+            if (idiomaSalvo && idiomaSalvo !== idiomaAtual) {
+                toggleLanguage();
+            }
+        }
+
+        // ========================
+        // 🎨 FUNÇÕES DO TEMA
+        // ========================
+        
         function toggleTheme() {
             const body = document.body;
             const themeIcon = document.getElementById('themeIcon');
             
             body.classList.toggle('dark-mode');
             
-            // Muda o ícone
             if (body.classList.contains('dark-mode')) {
                 themeIcon.textContent = '☀️';
                 localStorage.setItem('theme', 'dark');
@@ -543,7 +1580,6 @@
             }
         }
         
-        // Carrega o tema salvo
         function carregarTema() {
             const temaSalvo = localStorage.getItem('theme');
             const themeIcon = document.getElementById('themeIcon');
@@ -553,63 +1589,109 @@
                 themeIcon.textContent = '☀️';
             }
         }
+
+        // ========================
+        // 🎬 FUNÇÕES PRINCIPAIS
+        // ========================
         
         function aceitou() {
-            // Salva que ela aceitou
             localStorage.setItem('aceitouPedido', 'true');
             
-            // Mostra mensagem de felicidade
             document.getElementById('mensagemFinal').style.display = 'block';
-            
-            // Esconde os botões
             document.querySelector('.botoes').style.display = 'none';
             document.querySelector('.pergunta').style.display = 'none';
             
-            // Mostra o cronômetro e os filmes após 2 segundos
             setTimeout(() => {
-                document.getElementById('cronometro').style.display = 'block';
-                document.getElementById('filmes').style.display = 'block';
-                document.getElementById('futuro').style.display = 'block';
-                iniciarCronometro();
-                carregarFilmes();
+                mostrarConteudo();
                 
-                // Scroll suave para o cronômetro
                 document.getElementById('cronometro').scrollIntoView({ 
                     behavior: 'smooth',
                     block: 'center'
                 });
             }, 2000);
             
-            // Cria explosão de corações
             criarCoracoes();
         }
+
+        function mostrarConteudo() {
+            document.getElementById('tabsContainer').style.display = 'block';
+            document.getElementById('cronometro').style.display = 'block';
+            document.getElementById('futuro').style.display = 'block';
+            
+            iniciarCronometro();
+            carregarFilmes();
+            carregarMomentos();
+            carregarMusicas();
+            carregarJogos();
+            carregarBucketList();
+        }
+
+        function mostrarSecao(secaoId, btnElement) {
+            // Esconde todas as seções
+            ['cronometro', 'filmes', 'timeline', 'playlist', 'jogos', 'bucket'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            
+            // Mostra a seção selecionada
+            document.getElementById(secaoId).style.display = 'block';
+            
+            // Atualiza os botões ativos
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            btnElement.classList.add('active');
+            btnElement.setAttribute('aria-selected', 'true');
+            
+            // Scroll suave
+            setTimeout(() => {
+                document.getElementById(secaoId).scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 100);
+        }
+        
+        let fugirCount = 0;
         
         function fugirBotao() {
             const btn = document.getElementById('btnNao');
-            const maxX = window.innerWidth - btn.offsetWidth - 40;
-            const maxY = window.innerHeight - btn.offsetHeight - 40;
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
             
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
+            // Limita a área de fuga para dentro do container
+            const maxX = Math.min(window.innerWidth - btn.offsetWidth - 20, containerRect.right - btn.offsetWidth);
+            const minX = Math.max(20, containerRect.left);
+            const maxY = window.innerHeight - btn.offsetHeight - 20;
+            const minY = 100;
+            
+            const randomX = Math.random() * (maxX - minX) + minX;
+            const randomY = Math.random() * (maxY - minY) + minY;
             
             btn.style.position = 'fixed';
             btn.style.left = randomX + 'px';
             btn.style.top = randomY + 'px';
             btn.style.transition = 'all 0.3s ease';
+            btn.style.zIndex = '999';
+            
+            fugirCount++;
+            
+            // Depois de 5 tentativas, o botão fica menor
+            if (fugirCount > 5) {
+                btn.style.transform = `scale(${Math.max(0.5, 1 - (fugirCount - 5) * 0.1)})`;
+            }
         }
         
         function alertaNao() {
-            alert('Ah não! O botão "Não" está quebrado! 😅💕\nParece que o destino quer que a gente fique junto! 💖');
+            const mensagem = idiomaAtual === 'pt' 
+                ? 'Ah não! O botão "Não" está quebrado! 😅💕\nParece que o destino quer que a gente fique junto! 💖'
+                : 'Oh no! The "No" button is broken! 😅💕\nIt seems destiny wants us to be together! 💖';
+            alert(mensagem);
         }
         
         function iniciarCronometro() {
-            // SEMPRE usa a DATA_INICIO configurada no topo
             const dataInicio = new Date(DATA_INICIO);
-            
-            // Atualiza imediatamente
             atualizarCronometro(dataInicio);
-            
-            // Continua atualizando a cada segundo
             setInterval(() => atualizarCronometro(dataInicio), 1000);
         }
         
@@ -617,18 +1699,20 @@
             const agora = new Date();
             const diferenca = agora - dataInicio;
             
-            // Calcula o tempo decorrido
             const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
             const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
             const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
             
-            // Atualiza os números na tela
             document.getElementById('dias').textContent = dias;
             document.getElementById('horas').textContent = horas.toString().padStart(2, '0');
             document.getElementById('minutos').textContent = minutos.toString().padStart(2, '0');
             document.getElementById('segundos').textContent = segundos.toString().padStart(2, '0');
         }
+        
+        // ========================
+        // 🎬 FILMES COM DESCRIÇÃO
+        // ========================
         
         function carregarFilmes() {
             const tbody = document.getElementById('listaFilmes');
@@ -636,25 +1720,150 @@
             
             FILMES.forEach((filme, index) => {
                 const tr = document.createElement('tr');
+                tr.className = 'filme-row';
+                tr.setAttribute('tabindex', '0');
+                tr.setAttribute('role', 'button');
                 tr.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${filme.nome}</td>
                     <td>${filme.data}</td>
                     <td>${filme.nota}</td>
                 `;
+                tr.onclick = () => abrirModalFilme(filme);
+                tr.onkeypress = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        abrirModalFilme(filme);
+                    }
+                };
                 tbody.appendChild(tr);
             });
         }
+
+        function abrirModalFilme(filme) {
+            document.getElementById('modalTitulo').textContent = filme.nome;
+            document.getElementById('modalData').textContent = filme.data;
+            document.getElementById('modalNota').textContent = filme.nota;
+            document.getElementById('modalDescricao').textContent = filme.descricao;
+            document.getElementById('modalFilme').classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Foca no modal para acessibilidade
+            document.querySelector('.modal-close').focus();
+        }
+
+        function fecharModal() {
+            document.getElementById('modalFilme').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function fecharModalFilme(event) {
+            if (event.target === document.getElementById('modalFilme')) {
+                fecharModal();
+            }
+        }
+
+        // ========================
+        // 💕 MOMENTOS ESPECIAIS
+        // ========================
+        
+        function carregarMomentos() {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+            
+            MOMENTOS.forEach(momento => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h4>${momento.titulo}</h4>
+                        <p class="timeline-data">📅 ${momento.data}</p>
+                        <p>${momento.descricao}</p>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // ========================
+        // 🎵 MÚSICAS
+        // ========================
+        
+        function carregarMusicas() {
+            const container = document.getElementById('musicasContainer');
+            container.innerHTML = '';
+            
+            MUSICAS.forEach(musica => {
+                const item = document.createElement('div');
+                item.className = 'musica-item';
+                item.innerHTML = `
+                    <span class="musica-icon">${musica.emoji}</span>
+                    <div class="musica-info">
+                        <h4>${musica.nome}</h4>
+                        <p>${musica.artista}</p>
+                        <p class="musica-motivo">"${musica.motivo}"</p>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // ========================
+        // 🎮 JOGOS
+        // ========================
+        
+        function carregarJogos() {
+            const container = document.getElementById('jogosContainer');
+            container.innerHTML = '';
+            
+            JOGOS.forEach(jogo => {
+                const item = document.createElement('div');
+                item.className = 'jogo-item';
+                item.innerHTML = `
+                    <div class="jogo-icon">${jogo.emoji}</div>
+                    <h4>${jogo.nome}</h4>
+                    <p>${jogo.descricao}</p>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // ========================
+        // ✨ BUCKET LIST
+        // ========================
+        
+        function carregarBucketList() {
+            const container = document.getElementById('bucketContainer');
+            container.innerHTML = '';
+            
+            BUCKET_LIST.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `bucket-item ${item.completo ? 'completed' : ''}`;
+                div.innerHTML = `
+                    <span class="bucket-checkbox">${item.completo ? '✅' : '⬜'}</span>
+                    <span class="bucket-text">${item.texto}</span>
+                    ${item.dataCompleto ? `<span class="bucket-data">${item.dataCompleto}</span>` : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // ========================
+        // 💖 CORAÇÕES
+        // ========================
         
         function criarCoracoes() {
-            for (let i = 0; i < 20; i++) {
+            const isMobile = window.innerWidth < 768;
+            const quantidade = isMobile ? 10 : 20;
+            
+            for (let i = 0; i < quantidade; i++) {
                 setTimeout(() => {
                     const coracao = document.createElement('div');
                     coracao.textContent = ['💕', '💖', '💗', '💝', '❤️'][Math.floor(Math.random() * 5)];
                     coracao.style.position = 'fixed';
                     coracao.style.left = Math.random() * window.innerWidth + 'px';
                     coracao.style.top = window.innerHeight + 'px';
-                    coracao.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                    coracao.style.fontSize = (Math.random() * 20 + 15) + 'px';
                     coracao.style.transition = 'all 3s ease-out';
                     coracao.style.zIndex = '9999';
                     coracao.style.pointerEvents = 'none';
@@ -670,31 +1879,50 @@
                     setTimeout(() => {
                         coracao.remove();
                     }, 3100);
-                }, i * 100);
+                }, i * 150);
             }
         }
+
+        // ========================
+        // 🚀 INICIALIZAÇÃO
+        // ========================
         
-        // Quando a página carregar
         window.onload = function() {
-            // Carrega o tema salvo
             carregarTema();
+            carregarIdioma();
             
-            // Verifica se ela já aceitou anteriormente
             const jaAceitou = localStorage.getItem('aceitouPedido');
             if (jaAceitou === 'true') {
-                // Mostra tudo direto sem animações
                 document.getElementById('mensagemFinal').style.display = 'block';
                 document.querySelector('.botoes').style.display = 'none';
                 document.querySelector('.pergunta').style.display = 'none';
-                document.getElementById('cronometro').style.display = 'block';
-                document.getElementById('filmes').style.display = 'block';
-                document.getElementById('futuro').style.display = 'block';
                 
-                // Inicia o cronômetro com a DATA_INICIO
-                iniciarCronometro();
-                carregarFilmes();
+                mostrarConteudo();
             }
         }
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModal();
+            }
+        });
+
+        // Previne zoom em inputs no iOS
+        document.addEventListener('touchstart', function() {}, {passive: true});
+
+        // Detecta mudança de orientação
+        window.addEventListener('orientationchange', function() {
+            // Reposiciona o botão "Não" se estiver flutuando
+            const btn = document.getElementById('btnNao');
+            if (btn.style.position === 'fixed') {
+                btn.style.position = '';
+                btn.style.left = '';
+                btn.style.top = '';
+                btn.style.transform = '';
+                fugirCount = 0;
+            }
+        });
     </script>
 </body>
 </html>
